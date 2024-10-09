@@ -1,44 +1,40 @@
-import './style.css'
-import { useEffect, useState, useRef } from 'react'
-import Lixeira from '../formulario/excluir.png'
-import api from '../../services/api'
+import './style.css';
+import { useEffect, useState, useRef } from 'react';
+import Lixeira from '../formulario/excluir.png';
+import api from '../../services/api';
 
 function Formulario() {
-  //useEffect serve para quando iniciar a pagina sempre carregar a seguintes função
   useEffect(() => {
-    pegarUsuario()
-  }, [])
+    pegarUsuario();
+  }, []);
 
-  //useState serve para fazer uma variavel quando mudar o seu valor aparcer na tela
-  const [users, setUsers] = useState([])
-
-  //useRef serve para pegar o falor que ta no input, obs: la no input tem que colocar a referencia
-  const inputNome = useRef()
-  const inputAno = useRef()
-  const inputEmail = useRef()
+  const [users, setUsers] = useState([]);
+  const inputNome = useRef();
+  const inputAno = useRef();
+  const inputEmail = useRef();
 
   async function pegarUsuario() {
-    const usersFromApi = await api.get('/usuario')
-    setUsers(usersFromApi.data)
+    const usersFromApi = await api.get('/usuario');
+    setUsers(usersFromApi.data);
   }
 
   async function criarUsuario() {
     await api.post('/usuario', {
       nome: inputNome.current.value,
       ano: inputAno.current.value,
-      email: inputEmail.current.value
-    })
-    pegarUsuario()
+      email: inputEmail.current.value,
+    });
+    pegarUsuario();
   }
 
   async function deletarUsuario(id) {
-    await api.delete(`/usuario/${id}`)
-    pegarUsuario()
+    await api.delete(`/usuario/${id}`);
+    pegarUsuario();
   }
 
   return (
-
     <div className='conteiner'>
+      <h1>Lista de Usuários</h1> {/* Adicionado título aqui */}
       <div className='conteudo'>
         <form action="">
           <input id='nome' type="text" placeholder='Nome' ref={inputNome} />
@@ -55,10 +51,13 @@ function Formulario() {
             <p>Idade: {user.ano}</p>
             <p>E-mail: {user.email}</p>
           </div>
-          <button onClick={() => deletarUsuario(user.id)}><img src={Lixeira} /></button>
+          <button onClick={() => deletarUsuario(user.id)}>
+            <img src={Lixeira} alt="Excluir" />
+          </button>
         </div>
       ))}
     </div>
-  )
+  );
 }
-export default Formulario
+
+export default Formulario;
